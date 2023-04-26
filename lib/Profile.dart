@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'bottom_nav.dart';
+import 'itinerary.dart';
 
 
 class Profile extends StatefulWidget {
@@ -59,7 +60,7 @@ class _Profile extends State<Profile> {
           ),
         ),
       ),
-      body: Proflile1(),
+      body: Profile1(),
       bottomNavigationBar: BottomNav(),
     );
   }
@@ -67,7 +68,7 @@ class _Profile extends State<Profile> {
 
 
 
-class Proflile1 extends StatelessWidget {
+class Profile1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,73 +99,93 @@ class Proflile1 extends StatelessWidget {
                         ),
                         SizedBox(
                           width: 250,
-                          child: RaisedButton.icon(
+                          child: ElevatedButton.icon(
                             onPressed: () {},
-                            color: Colors.white,
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                side: BorderSide(color: Colors.grey),
+                              ),
+                            ),
                             icon: Icon(
                               Icons.person,
                               color: Color(0xFF0954E8),
                             ),
-                            label: Text('Personal Data'),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                side: BorderSide(color: Colors.grey)),
+                            label: Text('Personal Data',style: TextStyle(color: Colors.black),),
                           ),
                         ),
+
                         SizedBox(
                           height: 20,
                         ),
                         SizedBox(
                           width: 250,
-                          child: RaisedButton.icon(
-                            onPressed: () {},
-                            color: Colors.white,
+                          child: ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context){
+                                return itinerary();
+                              },),);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                side: BorderSide(color: Colors.grey),
+                              ),
+                            ),
                             icon: Icon(
                               Icons.directions_car_filled_outlined,
                               color: Color(0xFF0954E8),
                             ),
-                            label: Text('My Rides'),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                side: BorderSide(color: Colors.grey)),
+                            label: Text('My Rides',style: TextStyle(color: Colors.black),),
                           ),
                         ),
+
                         SizedBox(
                           height: 20,
                         ),
                         SizedBox(
                           width: 250,
-                          child: RaisedButton.icon(
+                          child: ElevatedButton.icon(
                             onPressed: () {},
-                            color: Colors.white,
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                side: BorderSide(color: Colors.grey),
+                              ),
+                            ),
                             icon: Icon(
                               Icons.settings,
                               color: Color(0xFF0954E8),
                             ),
-                            label: Text('Settings'),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                side: BorderSide(color: Colors.grey)),
+                            label: Text('Settings',style: TextStyle(color: Colors.black),),
                           ),
                         ),
+
                         SizedBox(
                           height: 20,
                         ),
                         SizedBox(
                           width: 250,
-                          child: RaisedButton.icon(
+                          child: ElevatedButton.icon(
                             onPressed: () {},
-                            color: Colors.white,
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                side: BorderSide(color: Colors.grey),
+                              ),
+                            ),
                             icon: Icon(
                               Icons.privacy_tip_outlined,
                               color: Color(0xFF0954E8),
                             ),
-                            label: Text('Privacy'),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                side: BorderSide(color: Colors.grey)),
+                            label: Text('Privacy',style: TextStyle(color: Colors.black),),
                           ),
                         ),
+
                       ],
                     ),
                   ),
