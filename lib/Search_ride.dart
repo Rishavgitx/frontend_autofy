@@ -316,7 +316,7 @@ class Searchride1 extends StatelessWidget {
                                           RideDetailsScreen()),
                                 );
                               },
-                              child: Text('Call Driver'),
+                              child: Text('schedule'),
                               style: ElevatedButton.styleFrom(
                                 primary: Color(0xFF0954E8),
                                 shape: RoundedRectangleBorder(
@@ -497,7 +497,7 @@ class Searchride1 extends StatelessWidget {
                                           RideDetailsScreen()),
                                 );
                               },
-                              child: Text('Call Driver'),
+                              child: Text('schedule'),
                               style: ElevatedButton.styleFrom(
                                 primary: Color(0xFF0954E8),
                                 shape: RoundedRectangleBorder(
@@ -679,7 +679,7 @@ class Searchride1 extends StatelessWidget {
                                           RideDetailsScreen()),
                                 );
                               },
-                              child: Text('Call Driver'),
+                              child: Text('schedule'),
                               style: ElevatedButton.styleFrom(
                                 primary: Color(0xFF0954E8),
                                 shape: RoundedRectangleBorder(
