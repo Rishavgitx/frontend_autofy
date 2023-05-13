@@ -1,207 +1,155 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-class ChatScreen1 extends StatefulWidget {
-  const ChatScreen1({Key? key}) : super(key: key);
+import 'package:flutter/cupertino.dart';
+List<ChatMessage> messages = [
+  ChatMessage(messageContent: "Hello, Will", messageType: "receiver"),
+  ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
+  ChatMessage(messageContent: "Hey Kriss, I am doing fine dude. wbu?", messageType: "sender"),
+  ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
+  ChatMessage(messageContent: "Is there any thing wrong?", messageType: "sender"),
+];
 
+class ChatMessage{
+
+  String messageContent;
+  String messageType;
+  ChatMessage({required this.messageContent, required this.messageType});
+}
+class ChatDetailPage extends StatefulWidget{
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  _ChatDetailPageState createState() => _ChatDetailPageState();
 }
 
-class _ChatScreenState extends State<ChatScreen1> {
-  List<Message> _messages = [
-    Message(
-      text: "Hello there",
-      sender: "M",
-      time: DateTime.now(),
-    ),
-    Message(
-      text: "Hi, how are you?",
-      sender: "B",
-      time: DateTime.now(),
-    ),
-    Message(
-      text: "I'm good, thanks",
-      sender: "M",
-      time: DateTime.now(),
-    ),
-    Message(
-      text: "What have you been up to?",
-      sender: "M",
-      time: DateTime.now(),
-    ),
-    Message(
-      text: "Not much, just working on some projects",
-      sender: "B",
-      time: DateTime.now(),
-    ),
-    Message(
-      text: "That's cool! What kind of projects?",
-      sender: "M",
-      time: DateTime.now(),
-    ),
-  ];
-
+class _ChatDetailPageState extends State<ChatDetailPage> {
   final TextEditingController _textController = TextEditingController();
+  final ScrollController _scrollController = ScrollController(); // add this line
+
+  void _sendMessage() {
+    String text = _textController.text.trim();
+    if (text.isNotEmpty) {
+      ChatMessage message = ChatMessage(
+        messageContent: text,
+        messageType: "sender",
+      );
+      setState(() {
+        messages.add(message);
+      });
+      _textController.clear();
+
+      // scroll to the bottom of the chat
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  AppBar(
-        elevation: 10,
-        toolbarHeight: 100, // increase the toolbar height
+        appBar: AppBar(
+          backgroundColor: Color(0xFF0954E8),
 
-        backgroundColor: Color(0xFF0954E8),
-        flexibleSpace: Padding(
-          padding: EdgeInsets.only(bottom: 0.0,left: 0), // adjust the value as needed
-          child: FlexibleSpaceBar(
-            title: Text('Person'),
-            background: Image.asset(
-              'assets/images/Untitled-1 (1).png',
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          flexibleSpace: SafeArea(
+            child: Container(
+              padding: EdgeInsets.only(right: 16),
+              child: Row(
+                children: <Widget>[
+                  IconButton(
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.arrow_back,color: Colors.black,),
+                  ),
+                  SizedBox(width: 2,),
+                  CircleAvatar(
+                    backgroundImage: NetworkImage("https://randomuser.me/api/portraits/men/5.jpg"),
+                    maxRadius: 20,
+                  ),
+                  SizedBox(width: 12,),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text("Person 0",style: TextStyle( fontSize: 16 ,fontWeight: FontWeight.w600,color: Colors.white),),
+                        SizedBox(height: 6,),
+                        Text("Online",style: TextStyle(color: Colors.white, fontSize: 13),),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
 
-      body: Column(
+      body: Stack(
         children: <Widget>[
-          Expanded(
-            child: ListView.builder(
-              itemCount: _messages.length,
-              itemBuilder: (BuildContext context, int index) {
-                final Message message = _messages[index];
-                return _buildMessage(message);
-              },
-            ),
-          ),
-          Divider(height: 1.0),
-          Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-            ),
-            child: _buildTextComposer(),
-          ),
-        ],
-      ),
-    );
-  }
+          ListView.builder(
+            controller: _scrollController, // add this line
 
-  Widget _buildMessage(Message message) {
-    final timeFormat = DateFormat('h:mm a'); // format the time to display only hours, minutes, and am/pm
-
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Row(
-        mainAxisAlignment:
-        message.sender == "M" ? MainAxisAlignment.end : MainAxisAlignment.start,
-        children: <Widget>[
-          if (message.sender == "B") // add image for user B
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: CircleAvatar(
-                backgroundImage: AssetImage("assets/images/Untitled-2.png"),
-
-              ),
-            ),
-          Container(
-            decoration: BoxDecoration(
-              color: message.sender == "A"
-                  ? Colors.grey[500]
-                  : Colors.blue[200],
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      message.sender,
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w500,
-                      ),
+            itemCount: messages.length,
+            shrinkWrap: true,
+            padding: EdgeInsets.only(top: 10,bottom: 10),
+            physics: AlwaysScrollableScrollPhysics(),
+            itemBuilder: (context, index){
+              return Container(
+                padding: EdgeInsets.only(left: 14,right: 14,top: 10,bottom: 10),
+                child: Align(
+                  alignment: (messages[index].messageType == "receiver"?Alignment.topLeft:Alignment.topRight),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: (messages[index].messageType  == "receiver"?Colors.grey.shade200:Colors.blue[200]),
                     ),
-                    Text(
-                      timeFormat.format(message.time), // format the time here
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 5.0),
-                Text(
-                  message.text,
-                  style: TextStyle(
-                    color: message.sender == "A" ? Colors.black : Colors.white,
+                    padding: EdgeInsets.all(16),
+                    child: Text(messages[index].messageContent, style: TextStyle(fontSize: 15),),
                   ),
                 ),
-              ],
+              );
+            },
+          ),
+
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Container(
+              padding: EdgeInsets.only(left: 10,bottom: 10,top: 10),
+              height: 60,
+              width: double.infinity,
+              color: Colors.white,
+              child: Row(
+                children: <Widget>[
+
+                  SizedBox(width: 15,),
+                  Expanded(
+                    child: TextField(
+                      controller: _textController, // add this line
+                      decoration: InputDecoration(
+                          hintText: "Write message...",
+                          hintStyle: TextStyle(color: Colors.black54),
+                          border: InputBorder.none
+                      ),
+                    ),
+
+                  ),
+                  SizedBox(width: 15,),
+                  FloatingActionButton(
+                    onPressed: _sendMessage,
+                    child: Icon(Icons.send,color: Colors.white,size: 18,),
+                    backgroundColor: Colors.blue,
+                    elevation: 0,
+                  ),
+
+                ],
+
+              ),
             ),
           ),
 
-          if (message.sender == "A") // add image for user A
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: CircleAvatar(
-                backgroundImage: AssetImage("assets/images/user_a.png"),
-              ),
-            ),
         ],
-      ),
-    );
+      ),    );
   }
-
-
-  Widget _buildTextComposer() {
-    return IconTheme(
-      data: IconThemeData(color: Theme.of(context).accentColor),
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 8.0),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: TextField(
-                controller: _textController,
-                onSubmitted: _handleSubmitted,
-                decoration:
-                InputDecoration.collapsed(hintText: 'Send a message'),
-              ),
-            ),
-            IconButton(
-              icon: Icon(Icons.send),
-              onPressed: () => _handleSubmitted(_textController.text),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _handleSubmitted(String text) {
-    if (text.isEmpty) {
-      return;
-    }
-    setState(() {
-      _messages.insert(
-        0,
-        Message(text: text, sender: "A", time: DateTime.now()),
-      );
-    });
-    _textController.clear();
-  }
-
-}
-
-class Message {
-  final String text;
-  final String sender;
-  final DateTime time;
-
-  Message({required this.text, required this.sender, required this.time});
 }
